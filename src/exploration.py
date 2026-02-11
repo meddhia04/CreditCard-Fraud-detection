@@ -18,5 +18,6 @@ print(f"Fraude: {fraud_count[1]}, ({fraud_count[1]/df.shape[0]*100:.2f}%) ")
 #Visualisation de déséquilibre
 plt.figure(figsize=(10,6))
 sns.countplot(x='Class',data = df)
-plt.title("Distribution des transactions Frauduleuses")
+plt.title("Distribution des transactions")
 plt.show()
+plt.savefig("../results/distribution.png")
