@@ -1,9 +1,9 @@
-import pandas
+import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import resample
-from imblearn.undersampling import RandomUnderSampler
+from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SMOTE
 """
 on utilise Standard scaler pour transformer les donnees pour qu'ils 
@@ -14,6 +14,7 @@ mais l'oversampling il ajoute des points de data par exemplle dans notre cas il 
 et crée un nouveaux point comme fraude plausible
 """
 def load_and_preprocess(df,strategie ='undersampling'):
+    
     print(f"Préprocessing des données-Stratégie : {strategie.upper()}")
     X = df.drop('Class',axis = 1)
     y = df['Class']
@@ -27,10 +28,10 @@ def load_and_preprocess(df,strategie ='undersampling'):
     les données sont ordonnées par temps (Colonne Time) 70% training 30% test
     """
     train_size = int(len(df)*0.7)
-    X_train = X[:train_size]
-    X_test = X[train_size:]
-    y_train = y[:train_size]
-    y_test = y[train_size:]
+    X_train = X.iloc[:train_size].copy()
+    X_test = X.iloc[train_size:].copy()
+    y_train = y.iloc[:train_size].copy()
+    y_test = y.iloc[train_size:].copy()
     """
     3.Scaling(Standardisation)
     Scaling seulement pour les amounts car (V1-V28 ) sont déja scalées
@@ -40,8 +41,8 @@ def load_and_preprocess(df,strategie ='undersampling'):
     X_train_scaled = X_train.copy()
     X_test_scaled = X_test.copy()
    
-    X_train_scaled['Amount'] = scaler.fit_transform(X_train['Amount'])
-    X_test_scaled['Amount'] = scaler.transform(X_test['Amount'])
+    X_train_scaled['Amount'] = scaler.fit_transform(X_train[['Amount']])
+    X_test_scaled['Amount'] = scaler.transform(X_test[['Amount']])
     
     """
     4.Gestion du Déséquilibre
@@ -56,13 +57,13 @@ def load_and_preprocess(df,strategie ='undersampling'):
         print(" -Résultats: 50%  fraudes , 50% normales ")
         
         under = RandomUnderSampler(random_state = 42)
-        X_Train_final,y_train_final = under.fit_resample(X_train_scaled,y_train)
-        print(f" -Avant {len(X_train_scaled)} transactions)")
-        print(f" -Aprés {len(X_Train_final)} transactions)")
-        print(f" -Economie de {len(X_train_scaled)-len(X_Train_final)} transactions)")
+        X_train_final,y_train_final = under.fit_resample(X_train_scaled,y_train)
+        print(f" -Avant {len(X_train_scaled)} transactions")
+        print(f" -Aprés {len(X_train_final)} transactions")
+        print(f" -Economie de {len(X_train_scaled)-len(X_train_final)} transactions")
         
     
-    elif strategie == 'oversampling':
+    else:
         print("Oversampling avec SMOTE")
         print(" -Principe: créer des fraudes sythétiques entre vraies fraudes")
         print(" -Résultats: 50%  fraudes , 50% normales ")
@@ -73,5 +74,19 @@ def load_and_preprocess(df,strategie ='undersampling'):
         print(f" -Avant {len(X_train_scaled)} transactions)")
         print(f" -Aprés {len(X_train_final)} transactions)")
         print(f" -Nouvelles transactions frauduleuses crées: {len(y_train_final[y_train_final==1])-len(y_train[y_train==1])}") 
-         
     
+    """5. Affichage des résultats finaux"""
+    return X_train_final,y_train_final,X_test_scaled,y_test
+
+
+if __name__ == "__main__":
+    
+    df = pd.read_csv('../data/creditcard.csv')
+    #1. Stratégie 1:undersampling
+    X_train,y_train,X_test,y_test = load_and_preprocess(df,strategie='undersampling')
+    print(f"UnderSampling Method: X_train ={X_train.shape},y_train = {y_train.shape} ,X_test = {X_test.shape} ,y_test = {y_test.shape}")
+    #2.Stratégie 2:oversampling
+    """
+    X_train,y_train,X_test,y_test = load_and_preprocess(df , strategie='oversampling')
+    print(f"OverSampling Method: {X_train}, {y_train} , {X_test} ,{y_test}")
+    """

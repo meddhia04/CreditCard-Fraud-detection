@@ -17,7 +17,7 @@ print(f"Non fraude: {fraud_count[0]}, ({fraud_count[0]/df.shape[0]*100:.2f}%) ")
 print(f"Fraude: {fraud_count[1]}, ({fraud_count[1]/df.shape[0]*100:.2f}%) ")
 #Visualisation de déséquilibre
 plt.figure(figsize=(10,6))
-sns.countplot(x='Class',data = df)
+sns.countplot(x='Class',data = df)#seaborn draws the plot , uses matplotlib internally
 plt.title("Distribution des transactions")
 plt.show()
-plt.savefig("../results/distribution.png")
+#plt.savefig("../results/distribution.png")
