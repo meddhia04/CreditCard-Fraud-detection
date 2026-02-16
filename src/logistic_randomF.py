@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from preprocessing import load_and_preprocess
 from thresh_hold_opt import best_thresh
+import os
 """
 LE ROC-AUC évalue la capacité de sépération,F1-SCORE évalue prédictions finales
 Logistic regression travaille bien sur les relations linéaires et il est facile a interprété
@@ -16,7 +17,10 @@ Le Random Forest fonctionnement : crée plusieurs arbres de décision a partir d
 aprés le modéle combine les résultats si classification -> vote majoritaire si régression-> Moyenne des prédictions
 """
 def train_sklearn_models(X_train,y_train,X_test,y_test):
+    #créer le dossier resuls
+    os.makedirs("../results",exist_ok=True)
     results = {}
+    """
     #1.Logistic Regression
     lr = LogisticRegression(
         class_weight='balanced',
@@ -45,7 +49,7 @@ def train_sklearn_models(X_train,y_train,X_test,y_test):
     print(f"ROC-AUC:{results['Logistic Regression']['roc_auc']:.4f}")
     #sauvegarde de model
     #joblib.dump(lr,'../models/logistic_regression.pkl')
-    
+    """
     #2.RANDOM FORREST
     rf = RandomForestClassifier(
         n_estimators=200,
@@ -78,9 +82,9 @@ def train_sklearn_models(X_train,y_train,X_test,y_test):
     print("Random Forest Model Results: ",end="")
     print(f"->F1-SCORE: {results['Random Forest']['f1']:.4f} / ",end="")
     print(f"ROC-AUC: {results['Random Forest']['roc_auc']:.4f}")
+    return results
     
     #Feature importance , les feature les plus important
-""""
 # 3. MATRICE DE CONFUSION
 def plot_confusion_matrix(y_test, y_pred, model_name):
     cm = confusion_matrix(y_test, y_pred)
@@ -90,11 +94,12 @@ def plot_confusion_matrix(y_test, y_pred, model_name):
     plt.ylabel('Vrai')
     plt.xlabel('Prédit')
     plt.savefig(f'../results/confusion_matrix_{model_name.lower().replace(" ", "_")}.png')
-"""
+    
 if __name__ == '__main__':
     df = pd.read_csv("../data/creditcard.csv")
-    #i will use undersampling strategie
+    #je veux utiliser la stratégie d'oversampling
     X_train,y_train,X_test,y_test = load_and_preprocess(df,'oversampling')
-    train_sklearn_models(X_train,y_train,X_test,y_test)
+    r = train_sklearn_models(X_train,y_train,X_test,y_test)
+    plot_confusion_matrix(y_test,r['Random Forest']['y_pred'],"Random Forest")
     
     
