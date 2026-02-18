@@ -20,7 +20,6 @@ def train_sklearn_models(X_train,y_train,X_test,y_test):
     #créer le dossier resuls
     os.makedirs("../results",exist_ok=True)
     results = {}
-    """
     #1.Logistic Regression
     lr = LogisticRegression(
         class_weight='balanced',
@@ -49,7 +48,6 @@ def train_sklearn_models(X_train,y_train,X_test,y_test):
     print(f"ROC-AUC:{results['Logistic Regression']['roc_auc']:.4f}")
     #sauvegarde de model
     #joblib.dump(lr,'../models/logistic_regression.pkl')
-    """
     #2.RANDOM FORREST
     rf = RandomForestClassifier(
         n_estimators=200,

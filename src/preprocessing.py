@@ -71,12 +71,12 @@ def load_and_preprocess(df,strategie ='undersampling'):
         smote  = SMOTE(random_state = 42)
         X_train_final,y_train_final = smote.fit_resample(X_train_scaled,y_train)
         
-        print(f" -Avant {len(X_train_scaled)} transactions)")
-        print(f" -Aprés {len(X_train_final)} transactions)")
+        print(f" -Avant {len(X_train_scaled)} transactions")
+        print(f" -Aprés {len(X_train_final)} transactions")
         print(f" -Nouvelles transactions frauduleuses crées: {len(y_train_final[y_train_final==1])-len(y_train[y_train==1])}") 
     
-    """5. Affichage des résultats finaux"""
-    return X_train_final,y_train_final,X_test_scaled,y_test
+    """5. Affichage des résultats finaux (float 32 pour que Keras gére mieux)"""
+    return X_train_final.values.astype('float32'),y_train_final.values.astype('float32'),X_test_scaled,y_test.values.astype('float32')
 
 
 if __name__ == "__main__":

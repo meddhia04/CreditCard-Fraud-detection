@@ -86,10 +86,9 @@ def train_neural_network(X_train, y_train, X_test, y_test):
     y_pred_final = (y_proba >= best_th).astype(int)
     f1_final = f1_score(y_test, y_pred_final)
     roc_auc = roc_auc_score(y_test, y_proba)
-    
+    print("Keras Modle Results: ")
     print(f"   - F1-Score: {f1_final:.4f}")
     print(f"   - ROC-AUC: {roc_auc:.4f}")
-    print(f"   - Meilleur seuil: {best_th:.4f}")
     
     return model, history, y_pred_final, y_proba, {
         'f1': f1_final,
