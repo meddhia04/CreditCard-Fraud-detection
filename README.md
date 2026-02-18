@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Credit Card Fraud Detection
 
 ## Description
