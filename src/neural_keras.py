@@ -56,7 +56,7 @@ def train_neural_network(X_train, y_train, X_test, y_test):
         batch_size=256,
         class_weight=class_weight,
         callbacks=[early_stop],
-        verbose=0
+        verbose=1
     )
     
     # PRÉDICTIONS - C'EST ICI QU'ON OBTIENT y_proba
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     df = pd.read_csv("../data/creditcard.csv")
     
     # Preprocessing
-    X_train, y_train, X_test, y_test = load_and_preprocess(df, 'weights')
+    X_train, y_train, X_test, y_test = load_and_preprocess(df, 'oversampling')
     # Entraînement
     model, history, y_pred, y_proba, metrics = train_neural_network(
         X_train, y_train, X_test, y_test
