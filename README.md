@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Credit Card Fraud Detection
 
 ## Description
@@ -30,3 +31,6 @@ python src/neural_keras.py
 docker build -t fraud-detection .
 docker run --rm -v ${PWD}/results:/app/results fraud-detection
 ``
+=======
+
+>>>>>>> 107cf6cc7e519f871abe50a49ea5b557fb7b0c5e
